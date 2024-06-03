@@ -45,6 +45,32 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.session.pause()
     }
     
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let touchLocation = touch.location(in: sceneView)
+
+        let hitTestResults = sceneView.hitTest(touchLocation, options: [:])
+        if let hitTestResult = hitTestResults.first {
+            let node = hitTestResult.node
+            node.removeFromParentNode()
+
+            // Add your shooting sound effect or scoring logic here
+        }
+    }
+    
+    func addShapes(to scene: SCNScene) {
+        let boxGeometry = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
+        let boxNode = SCNNode(geometry: boxGeometry)
+        boxNode.position = SCNVector3(0, 0, -0.5) // Adjust position as needed
+
+        let sphereGeometry = SCNSphere(radius: 0.05)
+        let sphereNode = SCNNode(geometry: sphereGeometry)
+        sphereNode.position = SCNVector3(0.2, 0, -0.5) // Adjust position as needed
+
+        scene.rootNode.addChildNode(boxNode)
+        scene.rootNode.addChildNode(sphereNode)
+    }
+        
     // MARK: - ARSCNViewDelegate
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
